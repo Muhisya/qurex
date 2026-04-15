@@ -15,7 +15,7 @@ const Login = () => {
       <div className="w-full max-w-md p-8 bg-white dark:bg-slate-900 rounded-3xl shadow-xl shadow-amber-100/50 dark:shadow-none border border-amber-100 dark:border-slate-800">
         <div className="text-center mb-10">
           <h1 className="text-4xl font-bold text-amber-600 mb-2">QureX</h1>
-          <p className="text-gray-500 dark:text-gray-400">Masuk untuk menyimpan progres hafalanmu</p>
+          <p className="text-gray-500 dark:text-gray-400">Sign in to save your favorite verses and manage your account</p>
         </div>
 
         <form onSubmit={handleLogin} className="space-y-6">
@@ -43,13 +43,13 @@ const Login = () => {
             type="submit"
             className="w-full py-4 bg-amber-500 hover:bg-amber-600 text-white font-bold rounded-2xl shadow-lg shadow-amber-200 dark:shadow-none transition-all active:scale-95"
           >
-            Masuk Sekarang
+            Sign In
           </button>
         </form>
 
         <div className="mt-8 text-center text-sm text-gray-500">
-          Belum punya akun? 
-          <Link to="/register" className="ml-1 text-amber-600 font-bold hover:underline">Daftar</Link>
+          Dont have an account?
+          <Link to="/register" className="ml-1 text-amber-600 font-bold hover:underline">Register</Link>
         </div>
       </div>
     </div>
