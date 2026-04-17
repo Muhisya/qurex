@@ -38,15 +38,18 @@ const Detail = () => {
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 15l7-7 7 7" />
     </svg>
   );
+  const shareIcon = (
+    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
+    </svg>
+  );
 
   useEffect(() => {
     dispatch(getSurahDetail(nomor));
     window.scrollTo(0, 0);
-
     const handleScroll = () => {
       setShowTopBtn(window.scrollY > 400);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, [dispatch, nomor]);
@@ -63,6 +66,24 @@ const Detail = () => {
 
   const isBookmarked = (ayatNomor) => {
     return bookmarks.some(b => b.id === `${nomor}:${ayatNomor}`);
+  };
+
+  const handleShare = async (ayat) => {
+    const shareData = {
+      title: `QureX - Surah ${detailSurah.namaLatin}`,
+      text: `"${ayat.teksIndonesia}" — Q.S ${detailSurah.namaLatin}: ${ayat.nomorAyat}`,
+      url: window.location.href,
+    };
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        await navigator.clipboard.writeText(`${shareData.text} \nRead more at: ${shareData.url}`);
+        alert('Verse copied to clipboard!');
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   if (loading) {
@@ -137,7 +158,7 @@ const Detail = () => {
                         {ayat.teksArab}
                       </h2>
                       <div className="space-y-8 max-w-3xl">
-                        <p className="text-amber-600 dark:text-amber-400 font-bold text-xl md:text-2xl italic leading-relaxed tracking-tight border-l-2 border-amber-200 dark:border-amber-900/50 pl-6">
+                        <p className="text-amber-600 dark:text-amber-400 font-bold text-lg md:text-xl italic leading-relaxed tracking-tight border-l-2 border-amber-200 dark:border-amber-900/50 pl-6">
                           {ayat.teksLatin}
                         </p>
                         <p className="text-slate-600 dark:text-slate-400 text-lg md:text-xl leading-relaxed font-medium">
@@ -165,12 +186,20 @@ const Detail = () => {
                           }))}
                           className={`flex items-center gap-3 px-8 py-4 rounded-[2rem] font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 ${
                             isCurrentLastRead
-                            ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30' 
+                            ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/30' 
                             : 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 hover:opacity-80'
                           }`}
                         >
                           {pinnedIcon} 
                           <span>{isCurrentLastRead ? 'Marked' : 'Mark Reading'}</span>
+                        </button>
+
+                        <button 
+                          onClick={() => handleShare(ayat)}
+                          className="flex items-center gap-3 px-8 py-4 rounded-[2rem] font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 hover:bg-amber-50 dark:hover:bg-amber-900/20"
+                        >
+                          {shareIcon}
+                          <span>Share</span>
                         </button>
                       </div>
                     </div>
