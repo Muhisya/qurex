@@ -11,21 +11,21 @@ function App() {
 
   return (
     <Router>
-      <div className={`${darkMode ? 'dark bg-slate-950 text-white' : 'bg-gray-50 text-slate-900'} min-h-screen transition-colors duration-300`}>
-          <main>
+      <div className={`${darkMode ? 'dark bg-slate-950 text-white' : 'bg-gray-50 text-slate-900'} min-h-screen transition-colors duration-300 flex flex-col`}>
 
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/surat/:nomor" element={<Detail />} />
-              <Route path="/bookmark" element={<Bookmark />} />
-            </Routes>
-          </main>
+        <main className="flex-grow">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/surat/:nomor" element={<Detail />} />
+            <Route path="/bookmark" element={<Bookmark />} />
+          </Routes>
+        </main>
 
-          <Footer />
+        <Footer />
+        
       </div>
     </Router>
-
   );
 }
 
