@@ -1,12 +1,17 @@
 import { useEffect, useState, useRef } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { Helmet } from 'react-helmet-async';
 import { getSurahDetail, toggleBookmark, setLastRead } from '../features/quranSlice';
 import { SkeletonAyat } from '../components/Skeleton';
 
 const Detail = () => {
   const [selectedQori, setSelectedQori] = useState('05');
   const audioRef = useRef(null);
+  const { nomor } = useParams();
+  const dispatch = useDispatch();
+  const { detailSurah, loading, bookmarks, lastRead } = useSelector((state) => state.quran);
+  const [showTopBtn, setShowTopBtn] = useState(false);
 
   const headphoneIcon = (
     <svg xmlns="http://www.w3.org/2000/svg" className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -34,11 +39,6 @@ const Detail = () => {
     </svg>
   );
 
-  const { nomor } = useParams();
-  const dispatch = useDispatch();
-  const { detailSurah, loading, bookmarks, lastRead } = useSelector((state) => state.quran);
-  const [showTopBtn, setShowTopBtn] = useState(false);
-  
   useEffect(() => {
     dispatch(getSurahDetail(nomor));
     window.scrollTo(0, 0);
@@ -77,6 +77,14 @@ const Detail = () => {
 
   return (
     <div className="container mx-auto p-4 md:p-8 max-w-5xl pb-40 transition-all duration-500 bg-slate-50/30 dark:bg-[#0f172a]">
+      {detailSurah && (
+        <Helmet>
+          <title>{`${detailSurah.namaLatin} | QureX`}</title>
+          <meta name="description" content={`Read and listen to Surah ${detailSurah.namaLatin} (${detailSurah.arti}) with translation and audio.`} />
+          <meta property="og:title" content={`${detailSurah.namaLatin} - QureX`} />
+        </Helmet>
+      )}
+
       <div className="flex justify-between items-center mb-12">
         <Link to="/" className="group flex items-center gap-4 text-amber-600 dark:text-amber-500 font-bold">
           <div className="w-12 h-12 flex items-center justify-center bg-white dark:bg-slate-800 rounded-2xl shadow-sm group-hover:bg-amber-500 group-hover:text-white transition-all group-hover:-translate-x-1">
@@ -85,8 +93,8 @@ const Detail = () => {
           <span className="hidden sm:inline tracking-tight text-sm uppercase font-black">Back to Library</span>
         </Link>
         <div className="text-right">
-           <p className="text-[10px] uppercase tracking-[0.4em] text-amber-600/60 font-black mb-1">Chapter {detailSurah?.nomor}</p>
-           <p className="font-black text-2xl text-slate-800 dark:text-white tracking-tighter">{detailSurah?.namaLatin}</p>
+          <p className="text-[10px] uppercase tracking-[0.4em] text-amber-600/60 font-black mb-1">Chapter {detailSurah?.nomor}</p>
+          <p className="font-black text-2xl text-slate-800 dark:text-white tracking-tighter">{detailSurah?.namaLatin}</p>
         </div>
       </div>
 
@@ -157,7 +165,7 @@ const Detail = () => {
                           }))}
                           className={`flex items-center gap-3 px-8 py-4 rounded-[2rem] font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 ${
                             isCurrentLastRead
-                            ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/30' 
+                            ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30' 
                             : 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 hover:opacity-80'
                           }`}
                         >
@@ -205,6 +213,7 @@ const Detail = () => {
               <div className="w-full md:flex-1 flex items-center gap-2">
                 <audio 
                   ref={audioRef} 
+                  key={selectedQori}
                   controls 
                   className="w-full h-9 md:h-8 custom-audio-mini"
                 >
