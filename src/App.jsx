@@ -9,7 +9,7 @@ function App() {
   const darkMode = useSelector((state) => state.quran.darkMode || false);
 
   return (
-    <Router basename="/qurex"> 
+    <Router>
       <div className={`${darkMode ? 'dark bg-slate-950 text-white' : 'bg-gray-50 text-slate-900'} min-h-screen transition-colors duration-300`}>
         <Routes>
           <Route path="/" element={<Home />} />
