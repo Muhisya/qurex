@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import Home from './pages/Home';
 import Detail from './pages/Detail';
@@ -8,7 +8,7 @@ function App() {
   const darkMode = useSelector((state) => state.quran?.darkMode || false);
 
   return (
-    <BrowserRouter>
+    <Router basename="/qurex"> 
       <div className={`${darkMode ? 'dark bg-slate-950 text-white' : 'bg-gray-50 text-slate-900'} min-h-screen transition-colors duration-300`}>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -17,7 +17,7 @@ function App() {
           <Route path="/bookmark" element={<Bookmark />} />
         </Routes>
       </div>
-    </BrowserRouter>
+    </Router>
   );
 }
 
