@@ -73,7 +73,7 @@ const Home = () => {
             </Link>
             <button 
               onClick={() => dispatch(toggleDarkMode())}
-              className="p-3 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 transition-transform hover:rotate-2 hover:scale-110 active:scale-90"
+              className="p-3 bg-amber-50 dark:bg-amber-900/20 text-amber-600 dark:text-amber-400 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 hover:bg-amber-500 hover:text-white transition-transform hover:rotate-2 hover:scale-110 active:scale-90"
             >
               {darkMode ? sunIcon : moonIcon}
             </button>
@@ -125,7 +125,7 @@ const Home = () => {
         <div className="relative group">
           <input
             type="text"
-            placeholder="Search surah (e.g. Al-Fatihah)..."
+            placeholder="Search surah..."
             className="w-full p-8 pl-24 bg-white dark:bg-slate-800 border-none rounded-[2.5rem] shadow-[0_30px_60px_-15px_rgba(245,158,11,0.3)] dark:shadow-none focus:ring-4 focus:ring-amber-500/20 transition-all outline-none dark:text-white text-xl font-bold placeholder:text-slate-300"
             onChange={(e) => dispatch(setSearchTerm(e.target.value))}
           />

@@ -36,9 +36,9 @@ const Detail = () => {
 
   const { nomor } = useParams();
   const dispatch = useDispatch();
-  const { detailSurah, loading, bookmarks } = useSelector((state) => state.quran);
+  const { detailSurah, loading, bookmarks, lastRead } = useSelector((state) => state.quran);
   const [showTopBtn, setShowTopBtn] = useState(false);
-
+  
   useEffect(() => {
     dispatch(getSurahDetail(nomor));
     window.scrollTo(0, 0);
@@ -115,83 +115,117 @@ const Detail = () => {
           </header>
 
           <div className="space-y-16">
-            {detailSurah.ayat.map((ayat) => (
-              <article key={ayat.nomorAyat} className="group relative">
-                <div className="bg-white dark:bg-slate-800 p-8 md:p-16 rounded-[4rem] border border-slate-100 dark:border-slate-700/60 shadow-sm hover:shadow-2xl hover:shadow-amber-500/5 transition-all duration-700">
-                  <div className="absolute -left-4 top-12 w-12 h-12 bg-slate-900 dark:bg-amber-500 text-white flex items-center justify-center rounded-2xl font-black text-lg shadow-xl group-hover:scale-110 transition-transform">
-                    {ayat.nomorAyat}
-                  </div>
-                  <div className="flex flex-col gap-12">
-                    <h2 className="text-4xl md:text-6xl font-arabic text-right leading-[2.5] dark:text-slate-100" dir="rtl">
-                      {ayat.teksArab}
-                    </h2>
-                    <div className="space-y-8 max-w-3xl">
-                      <p className="text-amber-600 dark:text-amber-400 font-bold text-xl md:text-2xl italic leading-relaxed tracking-tight border-l-2 border-amber-200 dark:border-amber-900/50 pl-6">
-                        {ayat.teksLatin}
-                      </p>
-                      <p className="text-slate-600 dark:text-slate-400 text-lg md:text-xl leading-relaxed font-medium">
-                        {ayat.teksIndonesia}
-                      </p>
+            {detailSurah.ayat.map((ayat) => {
+              const isCurrentLastRead = lastRead?.nomor === detailSurah.nomor && lastRead?.ayat === ayat.nomorAyat;
+
+              return (
+                <article key={ayat.nomorAyat} className="group relative">
+                  <div className="bg-white dark:bg-slate-800 p-8 md:p-16 rounded-[4rem] border border-slate-100 dark:border-slate-700/60 shadow-sm hover:shadow-2xl hover:shadow-amber-500/5 transition-all duration-700">
+                    <div className="absolute -left-4 top-12 w-12 h-12 bg-slate-900 dark:bg-amber-500 text-white flex items-center justify-center rounded-2xl font-black text-lg shadow-xl group-hover:scale-110 transition-transform">
+                      {ayat.nomorAyat}
                     </div>
-                    <div className="flex flex-wrap gap-3 pt-10">
-                      <button 
-                        onClick={() => dispatch(toggleBookmark({ id: `${detailSurah.nomor}:${ayat.nomorAyat}`, data: ayat, surahName: detailSurah.namaLatin }))}
-                        className={`flex items-center gap-3 px-8 py-4 rounded-[2rem] font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 ${
-                          isBookmarked(ayat.nomorAyat) 
-                          ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/30' 
-                          : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 hover:bg-amber-50 dark:hover:bg-amber-900/20'
-                        }`}
-                      >
-                        {isBookmarked(ayat.nomorAyat) ? bookmarkIconFilled : bookmarkIcon}
-                        <span>{isBookmarked(ayat.nomorAyat) ? 'Saved' : 'Save Verse'}</span>
-                      </button>
-                      <button 
-                        onClick={() => dispatch(setLastRead({ surah: detailSurah.namaLatin, nomor: detailSurah.nomor, ayat: ayat.nomorAyat }))}
-                        className="flex items-center gap-3 px-8 py-4 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-black text-[10px] uppercase tracking-widest rounded-[2rem] hover:opacity-80 transition-all active:scale-95"
-                      >
-                        {pinnedIcon} Mark Reading
-                      </button>
+                    <div className="flex flex-col gap-12">
+                      <h2 className="text-4xl md:text-6xl font-arabic text-right leading-[2.5] dark:text-slate-100" dir="rtl">
+                        {ayat.teksArab}
+                      </h2>
+                      <div className="space-y-8 max-w-3xl">
+                        <p className="text-amber-600 dark:text-amber-400 font-bold text-xl md:text-2xl italic leading-relaxed tracking-tight border-l-2 border-amber-200 dark:border-amber-900/50 pl-6">
+                          {ayat.teksLatin}
+                        </p>
+                        <p className="text-slate-600 dark:text-slate-400 text-lg md:text-xl leading-relaxed font-medium">
+                          {ayat.teksIndonesia}
+                        </p>
+                      </div>
+                      <div className="flex flex-wrap gap-3 pt-10">
+                        <button 
+                          onClick={() => dispatch(toggleBookmark({ id: `${detailSurah.nomor}:${ayat.nomorAyat}`, data: ayat, surahName: detailSurah.namaLatin }))}
+                          className={`flex items-center gap-3 px-8 py-4 rounded-[2rem] font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 ${
+                            isBookmarked(ayat.nomorAyat) 
+                            ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/30' 
+                            : 'bg-slate-100 dark:bg-slate-700 text-slate-500 dark:text-slate-300 hover:bg-amber-50 dark:hover:bg-amber-900/20'
+                          }`}
+                        >
+                          {isBookmarked(ayat.nomorAyat) ? bookmarkIconFilled : bookmarkIcon}
+                          <span>{isBookmarked(ayat.nomorAyat) ? 'Saved' : 'Save Verse'}</span>
+                        </button>
+                        
+                        <button 
+                          onClick={() => dispatch(setLastRead({ 
+                            surah: detailSurah.namaLatin, 
+                            nomor: detailSurah.nomor, 
+                            ayat: ayat.nomorAyat 
+                          }))}
+                          className={`flex items-center gap-3 px-8 py-4 rounded-[2rem] font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 ${
+                            isCurrentLastRead
+                            ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/30' 
+                            : 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 hover:opacity-80'
+                          }`}
+                        >
+                          {pinnedIcon} 
+                          <span>{isCurrentLastRead ? 'Marked' : 'Mark Reading'}</span>
+                        </button>
+                      </div>
                     </div>
                   </div>
-                </div>
-              </article>
-            ))}
+                </article>
+              );
+            })}
           </div>
 
-          <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] flex items-center gap-3 w-[95%] max-w-3xl px-4">
-            <div className="flex-1 bg-white/80 dark:bg-slate-900/80 backdrop-blur-2xl border border-white/20 dark:border-slate-700 p-3 md:p-4 rounded-[2.5rem] shadow-[0_30px_100px_-15px_rgba(0,0,0,0.3)] flex items-center gap-4 overflow-visible">
-              <div className="w-10 h-10 md:w-12 md:h-12 bg-amber-500 rounded-full flex items-center justify-center text-white flex-shrink-0 ">
-                {headphoneIcon}
-              </div>
-              
-              <div className="hidden lg:block flex-1 min-w-0">
-                 <p className="text-[9px] font-black uppercase tracking-widest text-amber-600 mb-0.5">Now Playing</p>
-                 <p className="text-xs font-bold text-slate-800 dark:text-white truncate">{detailSurah.namaLatin}</p>
+          <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-[100] w-[92%] max-w-3xl">
+            <div className="bg-white/90 dark:bg-slate-900/95 backdrop-blur-2xl border border-white/20 dark:border-slate-700/50 p-3 md:p-4 rounded-[2.5rem] md:rounded-full shadow-[0_20px_50px_-15px_rgba(0,0,0,0.4)] flex flex-col md:flex-row items-center gap-3 md:gap-4 transition-all duration-300">
+              <div className="flex items-center justify-between w-full md:w-auto gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 md:w-12 md:h-12 bg-amber-500 rounded-full flex items-center justify-center text-white flex-shrink-0 shadow-lg shadow-amber-500/20">
+                    {headphoneIcon}
+                  </div>
+                  <div className="min-w-0">
+                    <p className="text-[8px] md:text-[9px] font-black uppercase tracking-widest text-amber-600 mb-0.5">Now Playing</p>
+                    <p className="text-xs font-bold text-slate-800 dark:text-white truncate max-w-[120px] md:max-w-none">
+                      {detailSurah.namaLatin}
+                    </p>
+                  </div>
+                </div>
+                <div className="relative">
+                  <select 
+                    value={selectedQori}
+                    onChange={(e) => setSelectedQori(e.target.value)}
+                    className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[11px] md:text-[13px] font-black uppercase tracking-tighter py-2 pl-4 pr-8 rounded-full border-none outline-none appearance-none cursor-pointer hover:bg-amber-500 hover:text-white transition-all shadow-sm"
+                  >
+                    <option value="01">Qori 01</option>
+                    <option value="02">Qori 02</option>
+                    <option value="03">Qori 03</option>
+                    <option value="04">Qori 04</option>
+                    <option value="05">Qori 05</option>
+                  </select>
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-[8px] opacity-50">▼</div>
+                </div>
               </div>
 
-              <div className="relative group">
-                <select 
-                  value={selectedQori}
-                  onChange={(e) => setSelectedQori(e.target.value)}
-                  className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[13px] font-black uppercase tracking-tighter py-2 px-[18px] rounded-full border-none outline-none appearance-none cursor-pointer hover:bg-amber-500 hover:text-white transition-all shadow-sm"
+              <div className="w-full md:flex-1 flex items-center gap-2">
+                <audio 
+                  ref={audioRef} 
+                  controls 
+                  className="w-full h-9 md:h-8 custom-audio-mini"
                 >
-                  <option value="01">Qori 01</option>
-                  <option value="02">Qori 02</option>
-                  <option value="03">Qori 03</option>
-                  <option value="04">Qori 04</option>
-                  <option value="05">Qori 05</option>
-                </select>
-                <div className="absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none text-[8px]">▼</div>
+                  <source src={detailSurah.audioFull[selectedQori]} type="audio/mpeg" />
+                </audio>
+
+                <button
+                  onClick={scrollToTop}
+                  className={`md:hidden w-10 h-10 bg-amber-500 text-white rounded-full flex items-center justify-center flex-shrink-0 transition-all active:scale-90 ${
+                    showTopBtn ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
+                  }`}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 15l7-7 7 7" />
+                  </svg>
+                </button>
               </div>
-
-              <audio ref={audioRef} controls className="flex-1 h-8 custom-audio-mini max-w-[150px] md:max-w-xs">
-                <source src={detailSurah.audioFull[selectedQori]} type="audio/mpeg" />
-              </audio>
             </div>
-
             <button
               onClick={scrollToTop}
-              className={`w-14 h-14 md:w-16 md:h-16 bg-white dark:bg-slate-800 text-amber-600 dark:text-amber-500 rounded-full shadow-2xl flex items-center justify-center border border-slate-100 dark:border-slate-700 transition-all duration-500 hover:bg-amber-500 hover:text-white active:scale-90 flex-shrink-0 ${
+              className={`hidden md:flex absolute -right-20 bottom-0 w-16 h-16 bg-white dark:bg-slate-800 text-amber-600 dark:text-amber-500 rounded-full shadow-2xl items-center justify-center border border-slate-100 dark:border-slate-700 transition-all duration-500 hover:bg-amber-500 hover:text-white active:scale-90 ${
                 showTopBtn ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'
               }`}
             >
