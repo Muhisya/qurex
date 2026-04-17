@@ -2,6 +2,7 @@
   "name": "qurex",
   "private": true,
   "version": "0.0.0",
+  "homepage": "https://muhisya.github.io/qurex/",
   "type": "module",
   "scripts": {
     "dev": "vite",
