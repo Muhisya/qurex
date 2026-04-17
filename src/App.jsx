@@ -4,8 +4,9 @@ import Home from './pages/Home';
 import Detail from './pages/Detail';
 import Login from './pages/Login';
 import Bookmark from './pages/Bookmark';
+
 function App() {
-  const darkMode = useSelector((state) => state.quran?.darkMode || false);
+  const darkMode = useSelector((state) => state.quran.darkMode || false);
 
   return (
     <Router basename="/qurex"> 

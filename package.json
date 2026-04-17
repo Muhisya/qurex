@@ -2,8 +2,8 @@
   "name": "qurex",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://muhisya.github.io/qurex/",
   "type": "module",
+  "homepage": "https://muhisya.github.io/qurex/",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
