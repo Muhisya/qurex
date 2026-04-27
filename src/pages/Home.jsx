@@ -62,7 +62,7 @@ const Home = () => {
               <span className="text-white font-black text-xl italic">Q</span>
             </div>
             <h1 className="text-2xl font-black text-slate-800 dark:text-white tracking-tighter">
-              Qure<span className="text-amber-500">X</span>
+              Qude<span className="text-amber-500">X</span>
             </h1>
           </div>
           
