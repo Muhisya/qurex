@@ -1,9 +1,9 @@
 {
-  "name": "qurex",
+  "name": "qudex",
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://muhisya.github.io/qurex",
+  "homepage": "https://muhisya.github.io/qudex",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
