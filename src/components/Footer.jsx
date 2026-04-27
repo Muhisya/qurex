@@ -6,7 +6,7 @@ const Footer = () => {
           
           <div className="text-center md:text-left">
             <h2 className="text-2xl font-black tracking-tighter text-slate-900 dark:text-white mb-2">
-              Qure<span className="text-amber-500">X</span>
+              Qude<span className="text-amber-500">X</span>
             </h2>
             <p className="text-slate-500 dark:text-slate-400 text-sm font-medium max-w-xs">
               A modern digital Al-Quran experience designed for clarity and spiritual immersion.
