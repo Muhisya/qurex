@@ -88,10 +88,13 @@ const Detail = () => {
 
   if (loading) {
     return (
-      <div className="container mx-auto p-6 md:p-12 space-y-10 max-w-5xl">
-        <div className="animate-pulse bg-amber-50 dark:bg-slate-800/50 h-80 rounded-[4rem]"></div>
-        <SkeletonAyat />
-        <SkeletonAyat />
+      <div className="container mx-auto p-4 md:p-8 space-y-12 max-w-5xl">
+        <div className="animate-pulse bg-slate-200 dark:bg-slate-800 h-64 md:h-80 rounded-[4rem] w-full mb-10"></div>
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="space-y-6">
+            <SkeletonAyat />
+          </div>
+        ))}
       </div>
     );
   }
@@ -186,7 +189,7 @@ const Detail = () => {
                           }))}
                           className={`flex items-center gap-3 px-8 py-4 rounded-[2rem] font-black text-[10px] uppercase tracking-widest transition-all active:scale-95 ${
                             isCurrentLastRead
-                            ? 'bg-amber-500 text-white shadow-lg shadow-amber-500/30' 
+                            ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/30' 
                             : 'bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 hover:opacity-80'
                           }`}
                         >

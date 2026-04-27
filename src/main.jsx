@@ -16,3 +16,11 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     </HelmetProvider>
   </React.StrictMode>
 );
+
+const loader = document.getElementById('initial-loader');
+if (loader) {
+  setTimeout(() => {
+    loader.style.opacity = '0';
+    setTimeout(() => loader.remove(), 500);
+  }, 500);
+}
